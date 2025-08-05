@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Ciencia del Frontend: Una Exploración Interactiva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: A single-page application with a top navigation bar to switch between five thematic sections: Psicología y UX, Análisis y Datos, Rendimiento y Técnica, Accesibilidad (WCAG), and Futuro del Frontend. This non-linear, dashboard-like structure allows users to freely explore concepts based on interest, rather than following the report's linear order. The goal is to enhance engagement and understanding by presenting information in interactive, digestible modules (e.g., clickable diagrams, simulated heatmaps, dynamic charts), which is more effective for complex topics than a long-scroll document. -->
+    <!-- Visualization & Content Choices: 
+        - Gestalt Principles: Goal: Organize. Method: Interactive HTML/CSS diagram. Interaction: Clicking a principle highlights an example and shows text. Justification: More engaging and memorable than a static list.
+        - Heatmaps: Goal: Inform. Method: Simulated heatmap on a mock webpage using Canvas. Interaction: Buttons toggle between click, scroll, and move map views. Justification: Visually demonstrates a key analysis tool effectively without real data.
+        - Core Web Vitals: Goal: Compare/Inform. Method: Bar chart (Chart.js). Interaction: Tooltips on hover provide details. Justification: Clearly visualizes performance metrics and their ideal thresholds.
+        - WCAG Principles: Goal: Organize. Method: Four-column interactive layout (HTML/CSS). Interaction: Clicking a principle expands to show details. Justification: Structures dense information logically and accessibly.
+        - All text is condensed from the source report to fit the interactive format. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      .nav-button {
+        transition: all 0.3s ease;
+      }
+      .nav-button.active {
+        background-color: #4f46e5;
+        color: white;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      }
+      .content-section {
+        display: none;
+      }
+      .content-section.active {
+        display: block;
+        animation: fadeIn 0.5s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 300px;
+        max-height: 400px;
+      }
+      @media (min-width: 768px) {
+        .chart-container {
+          height: 350px;
+        }
+      }
+      .gestalt-card.active {
+        border-color: #4f46e5;
+        box-shadow: 0 0 15px rgba(79, 70, 229, 0.3);
+        transform: scale(1.03);
+      }
+      .bias-card-inner {
+        transform-style: preserve-3d;
+        transition: transform 0.6s;
+      }
+      .bias-card.flipped .bias-card-inner {
+        transform: rotateY(180deg);
+      }
+      .bias-card-front,
+      .bias-card-back {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
+      .bias-card-back {
+        transform: rotateY(180deg);
+      }
+    </style>
+  </head>
+  <body class="bg-stone-50 text-slate-800">
+    <div class="container mx-auto px-4 py-8 md:py-12">
+      <header class="text-center mb-8 md:mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-indigo-700">La Ciencia del Frontend</h1>
+        <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">
+          Una exploración interactiva de cómo la psicología, los datos y la tecnología convergen para crear experiencias
+          de usuario excepcionales.
+        </p>
+      </header>
+
+      <nav class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8 md:mb-12">
+        <button
+          data-target="psicologia"
+          class="nav-button active text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white shadow-sm hover:bg-indigo-100"
+        >
+          Psicología y UX
+        </button>
+        <button
+          data-target="analisis"
+          class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white shadow-sm hover:bg-indigo-100"
+        >
+          Análisis y Datos
+        </button>
+        <button
+          data-target="rendimiento"
+          class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white shadow-sm hover:bg-indigo-100"
+        >
+          Rendimiento
+        </button>
+        <button
+          data-target="accesibilidad"
+          class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white shadow-sm hover:bg-indigo-100"
+        >
+          Accesibilidad
+        </button>
+        <button
+          data-target="futuro"
+          class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white shadow-sm hover:bg-indigo-100"
+        >
+          Futuro
+        </button>
+        <button
+          data-target="ejemplos"
+          class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white shadow-sm hover:bg-indigo-100"
+        >
+          Ejemplos Destacados
+        </button>
+      </nav>
+
+      <main id="main-content">
+        <section id="psicologia" class="content-section active">
+          <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
+            <h2 class="text-2xl md:text-3xl font-bold text-indigo-600 mb-2">Psicología Aplicada a la UX</h2>
+            <p class="text-slate-600 mb-8">
+              Esta sección explora cómo los principios de la psicología cognitiva guían el diseño de interfaces
+              intuitivas. Al entender cómo los usuarios perciben la información y toman decisiones, podemos crear
+              experiencias más fluidas y efectivas, reduciendo la carga cognitiva y guiando la atención de forma
+              natural.
+            </p>
+
+            <div class="border-t border-slate-200 pt-6">
+              <h3 class="text-xl font-semibold mb-4">Principios de la Gestalt en Acción</h3>
+              <p class="text-slate-600 mb-6">
+                Los principios de la Gestalt describen cómo organizamos la información visual. Haz clic en cada
+                principio para ver un ejemplo y su explicación.
+              </p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div
+                  id="gestalt-visuals"
+                  class="bg-slate-100 rounded-lg p-6 flex items-center justify-center min-h-[250px]"
+                >
+                  <!-- Visuals will be dynamically inserted here -->
+                </div>
+                <div id="gestalt-info" class="space-y-4">
+                  <!-- Info cards will be dynamically inserted here -->
+                </div>
+              </div>
+            </div>
+
+            <div class="border-t border-slate-200 pt-6 mt-8">
+              <h3 class="text-xl font-semibold mb-4">Sesgos Cognitivos en el Diseño</h3>
+              <p class="text-slate-600 mb-6">
+                Los sesgos cognitivos son atajos mentales que influyen en nuestras decisiones. Usados éticamente, pueden
+                guiar al usuario y mejorar la efectividad de la interfaz. Haz clic en una tarjeta para ver su
+                descripción.
+              </p>
+              <div id="cognitive-biases" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Bias cards will be dynamically inserted here -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="analisis" class="content-section">
+          <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
+            <h2 class="text-2xl md:text-3xl font-bold text-indigo-600 mb-2">Análisis de Datos y Comportamiento</h2>
+            <p class="text-slate-600 mb-8">
+              En esta sección, verás cómo las herramientas de análisis de datos, como los mapas de calor, nos permiten
+              "ver" a través de los ojos del usuario. Estos datos cuantitativos son cruciales para identificar patrones
+              de comportamiento, puntos de fricción y oportunidades de optimización, transformando hipótesis en mejoras
+              medibles.
+            </p>
+
+            <div class="border-t border-slate-200 pt-6">
+              <h3 class="text-xl font-semibold mb-4">Interpretando Mapas de Calor</h3>
+              <p class="text-slate-600 mb-6">
+                Los mapas de calor visualizan la interacción del usuario. Selecciona un tipo de mapa para ver una
+                simulación de cómo se interpretan los datos de comportamiento en una página de producto.
+              </p>
+              <div class="flex justify-center gap-3 mb-4">
+                <button
+                  id="btn-click-map"
+                  class="bg-indigo-500 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-indigo-600"
+                >
+                  Mapa de Clics
+                </button>
+                <button
+                  id="btn-scroll-map"
+                  class="bg-slate-200 text-slate-700 py-2 px-4 rounded-md text-sm font-medium hover:bg-slate-300"
+                >
+                  Mapa de Scroll
+                </button>
+                <button
+                  id="btn-move-map"
+                  class="bg-slate-200 text-slate-700 py-2 px-4 rounded-md text-sm font-medium hover:bg-slate-300"
+                >
+                  Mapa de Movimiento
+                </button>
+              </div>
+              <div class="relative max-w-2xl mx-auto border rounded-lg overflow-hidden shadow-inner">
+                <img
+                  src="https://placehold.co/800x600/f0f4f8/e2e8f0?text=P%C3%A1gina+de+Ejemplo"
+                  alt="Página de producto de ejemplo"
+                  class="w-full h-auto"
+                />
+                <!-- Canvas for click and scroll maps -->
+                <canvas id="heatmap-canvas" class="absolute top-0 left-0 w-full h-full z-10"></canvas>
+                <!-- Image for move map, initially hidden -->
+                <img
+                  id="move-heatmap-image"
+                  src="/heat-map.jpg"
+                  alt="Mapa de Movimiento de Ejemplo"
+                  class="absolute top-0 left-0 w-full h-full z-10 hidden"
+                />
+              </div>
+              <p id="heatmap-explanation" class="mt-4 text-center text-slate-600 max-w-2xl mx-auto"></p>
+            </div>
+          </div>
+        </section>
+
+        <section id="rendimiento" class="content-section">
+          <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
+            <h2 class="text-2xl md:text-3xl font-bold text-indigo-600 mb-2">Optimización del Rendimiento</h2>
+            <p class="text-slate-600 mb-8">
+              La velocidad es un pilar fundamental de una buena experiencia de usuario. Aquí exploramos las Core Web
+              Vitals de Google, métricas que miden el rendimiento de carga, la interactividad y la estabilidad visual.
+              Optimizar estas métricas no solo satisface a los usuarios, sino que también mejora el posicionamiento en
+              buscadores.
+            </p>
+
+            <div class="border-t border-slate-200 pt-6">
+              <h3 class="text-xl font-semibold mb-4 text-center">Core Web Vitals (CWV)</h3>
+              <p class="text-slate-600 mb-6 text-center max-w-2xl mx-auto">
+                Estas tres métricas son cruciales para medir la experiencia de usuario en el mundo real. El gráfico
+                muestra los umbrales recomendados por Google para una buena experiencia.
+              </p>
+              <div class="chart-container">
+                <canvas id="cwvChart"></canvas>
+              </div>
+            </div>
+
+            <div class="border-t border-slate-200 pt-6 mt-8">
+              <h3 class="text-xl font-semibold mb-4">Estrategias de Optimización</h3>
+              <p class="text-slate-600 mb-6">
+                Para alcanzar buenas puntuaciones en las CWV, se aplican diversas técnicas. Estas estrategias trabajan
+                en conjunto para reducir el tiempo de carga y mejorar la capacidad de respuesta de la página.
+              </p>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
+                <div class="bg-slate-100 p-4 rounded-lg">
+                  <h4 class="font-semibold text-indigo-700">Minificación y Compresión</h4>
+                  <p class="text-sm text-slate-600 mt-1">
+                    Reduce el tamaño de los archivos (HTML, CSS, JS, imágenes) para una transferencia más rápida.
+                  </p>
+                </div>
+                <div class="bg-slate-100 p-4 rounded-lg">
+                  <h4 class="font-semibold text-indigo-700">Caching y CDNs</h4>
+                  <p class="text-sm text-slate-600 mt-1">
+                    Almacena recursos cerca del usuario para acelerar visitas repetidas y reducir la latencia.
+                  </p>
+                </div>
+                <div class="bg-slate-100 p-4 rounded-lg">
+                  <h4 class="font-semibold text-indigo-700">Lazy Loading</h4>
+                  <p class="text-sm text-slate-600 mt-1">
+                    Retrasa la carga de imágenes y videos que no están visibles hasta que el usuario se desplace hacia
+                    ellos.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="accesibilidad" class="content-section">
+          <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
+            <h2 class="text-2xl md:text-3xl font-bold text-indigo-600 mb-2">Accesibilidad Web (WCAG)</h2>
+            <p class="text-slate-600 mb-8">
+              Un sitio web verdaderamente excelente es aquel que todos pueden usar. Esta sección desglosa los cuatro
+              principios de las Directrices de Accesibilidad para el Contenido Web (WCAG). Implementar estas directrices
+              no solo es una responsabilidad ética, sino que mejora la usabilidad y el SEO para todos los usuarios.
+            </p>
+
+            <div class="border-t border-slate-200 pt-6">
+              <h3 class="text-xl font-semibold mb-4 text-center">Los 4 Principios de la Accesibilidad</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-slate-50 p-6 rounded-lg border-l-4 border-indigo-500">
+                  <h4 class="text-lg font-bold text-indigo-700">Perceptible</h4>
+                  <p class="mt-2 text-slate-600">
+                    La información debe presentarse de forma que los usuarios puedan percibirla, sin depender de un
+                    único sentido.
+                  </p>
+                  <ul class="mt-3 text-sm text-slate-500 list-disc list-inside space-y-1">
+                    <li>Texto alternativo en imágenes</li>
+                    <li>Subtítulos en videos</li>
+                    <li>Contraste de color adecuado</li>
+                  </ul>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-lg border-l-4 border-teal-500">
+                  <h4 class="text-lg font-bold text-teal-700">Operable</h4>
+                  <p class="mt-2 text-slate-600">
+                    La interfaz y la navegación deben ser manejables por todos, incluyendo usuarios que no usan ratón.
+                  </p>
+                  <ul class="mt-3 text-sm text-slate-500 list-disc list-inside space-y-1">
+                    <li>Navegación completa por teclado</li>
+                    <li>Tiempo suficiente para tareas</li>
+                    <li>Evitar contenido que parpadee</li>
+                  </ul>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-lg border-l-4 border-amber-500">
+                  <h4 class="text-lg font-bold text-amber-700">Comprensible</h4>
+                  <p class="mt-2 text-slate-600">
+                    La información y el funcionamiento de la interfaz deben ser fáciles de entender.
+                  </p>
+                  <ul class="mt-3 text-sm text-slate-500 list-disc list-inside space-y-1">
+                    <li>Lenguaje claro y sencillo</li>
+                    <li>Navegación predecible</li>
+                    <li>Ayuda para corregir errores</li>
+                  </ul>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-lg border-l-4 border-rose-500">
+                  <h4 class="text-lg font-bold text-rose-700">Robusto</h4>
+                  <p class="mt-2 text-slate-600">
+                    El contenido debe ser compatible con tecnologías de asistencia actuales y futuras.
+                  </p>
+                  <ul class="mt-3 text-sm text-slate-500 list-disc list-inside space-y-1">
+                    <li>Código HTML válido</li>
+                    <li>Compatibilidad con navegadores</li>
+                    <li>Funciona con lectores de pantalla</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="futuro" class="content-section">
+          <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
+            <h2 class="text-2xl md:text-3xl font-bold text-indigo-600 mb-2">Tendencias Emergentes</h2>
+            <p class="text-slate-600 mb-8">
+              El frontend está en constante evolución. Esta sección ofrece una visión de las tendencias que están
+              moldeando el futuro del desarrollo web, desde la personalización impulsada por IA hasta arquitecturas más
+              escalables y un enfoque creciente en la sostenibilidad digital.
+            </p>
+
+            <div class="border-t border-slate-200 pt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <h3 class="text-xl font-semibold mb-3">IA y Machine Learning en UX</h3>
+                <p class="text-slate-600 mb-4">
+                  La IA está transformando el diseño al permitir una personalización sin precedentes. Analiza el
+                  comportamiento del usuario para anticipar necesidades, adaptar interfaces en tiempo real y automatizar
+                  pruebas de usabilidad.
+                </p>
+                <ul class="space-y-2">
+                  <li class="flex items-start">
+                    <span class="text-indigo-500 mr-3 mt-1">&#10003;</span>
+                    <span
+                      ><strong class="font-semibold">Diseño Predictivo:</strong> Recomienda contenido y productos de
+                      forma proactiva (ej. Netflix).</span
+                    >
+                  </li>
+                  <li class="flex items-start">
+                    <span class="text-indigo-500 mr-3 mt-1">&#10003;</span>
+                    <span
+                      ><strong class="font-semibold">Prototipado Rápido:</strong> Herramientas que sugieren componentes
+                      y generan alternativas de diseño.</span
+                    >
+                  </li>
+                  <li class="flex items-start">
+                    <span class="text-indigo-500 mr-3 mt-1">&#10003;</span>
+                    <span
+                      ><strong class="font-semibold">Accesibilidad Mejorada:</strong> Identifica automáticamente
+                      problemas de contraste, tipografía, etc.</span
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-3">Micro-Frontends y Diseño Sostenible</h3>
+                <p class="text-slate-600 mb-4">
+                  Dos conceptos que reflejan la madurez de la disciplina: la necesidad de escalar equipos y la
+                  responsabilidad ecológica.
+                </p>
+                <ul class="space-y-2">
+                  <li class="flex items-start">
+                    <span class="text-teal-500 mr-3 mt-1">&#10003;</span>
+                    <span
+                      ><strong class="font-semibold">Micro-Frontends:</strong> Divide una aplicación monolítica en
+                      piezas más pequeñas y manejables, permitiendo que equipos independientes trabajen de forma
+                      autónoma.</span
+                    >
+                  </li>
+                  <li class="flex items-start">
+                    <span class="text-teal-500 mr-3 mt-1">&#10003;</span>
+                    <span
+                      ><strong class="font-semibold">Diseño Sostenible:</strong> Busca minimizar el impacto ambiental de
+                      los sitios web optimizando recursos, reduciendo el consumo de energía y eligiendo hosting
+                      ecológico.</span
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="ejemplos" class="content-section">
+          <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
+            <h2 class="text-2xl md:text-3xl font-bold text-indigo-600 mb-2">Empresas y Productos Destacados</h2>
+            <p class="text-slate-600 mb-8">
+              Esta sección presenta ejemplos de empresas y productos que han demostrado un liderazgo excepcional en la
+              aplicación de los principios de la ciencia del frontend, creando experiencias de usuario innovadoras y
+              altamente efectivas.
+            </p>
+
+            <div class="border-t border-slate-200 pt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div class="bg-slate-100 p-4 rounded-lg flex items-start space-x-3">
+                <img
+                  src="https://placehold.co/24x24/4285F4/ffffff?text=G"
+                  alt="Logo de Google"
+                  class="w-6 h-6 rounded-full flex-shrink-0 mt-1"
+                />
+                <div>
+                  <h4 class="font-semibold text-indigo-700">Google</h4>
+                  <p class="text-sm text-slate-600 mt-1">
+                    Éxito basado en la simplicidad y rapidez de su motor de búsqueda, minimizando la fricción para el
+                    usuario.
+                  </p>
+                </div>
+              </div>
+              <div class="bg-slate-100 p-4 rounded-lg flex items-start space-x-3">
+                <img
+                  src="https://placehold.co/24x24/FF5A5F/ffffff?text=A"
+                  alt="Logo de Airbnb"
+                  class="w-6 h-6 rounded-full flex-shrink-0 mt-1"
+                />
+                <div>
+                  <h4 class="font-semibold text-indigo-700">Airbnb</h4>
+                  <p class="text-sm text-slate-600 mt-1">
+                    Dominio de la narrativa visual, interfaz minimalista y navegación intuitiva con microtextos
+                    informativos.
+                  </p>
+                </div>
+              </div>
+              <div class="bg-slate-100 p-4 rounded-lg flex items-start space-x-3">
+                <img
+                  src="https://placehold.co/24x24/58CC02/ffffff?text=D"
+                  alt="Logo de Duolingo"
+                  class="w-6 h-6 rounded-full flex-shrink-0 mt-1"
+                />
+                <div>
+                  <h4 class="font-semibold text-indigo-700">Duolingo</h4>
+                  <p class="text-sm text-slate-600 mt-1">
+                    Gamificación del aprendizaje de idiomas con una interfaz que fomenta el uso constante y la
+                    participación.
+                  </p>
+                </div>
+              </div>
+              <div class="bg-slate-100 p-4 rounded-lg flex items-start space-x-3">
+                <img
+                  src="https://placehold.co/24x24/FF7F50/ffffff?text=H"
+                  alt="Logo de Headspace"
+                  class="w-6 h-6 rounded-full flex-shrink-0 mt-1"
+                />
+                <div>
+                  <h4 class="font-semibold text-indigo-700">Headspace</h4>
+                  <p class="text-sm text-slate-600 mt-1">
+                    Estética relajante, paleta de colores suaves y animaciones sutiles para una experiencia sin estrés.
+                  </p>
+                </div>
+              </div>
+              <div class="bg-slate-100 p-4 rounded-lg flex items-start space-x-3">
+                <img
+                  src="https://placehold.co/24x24/1DB954/ffffff?text=S"
+                  alt="Logo de Spotify"
+                  class="w-6 h-6 rounded-full flex-shrink-0 mt-1"
+                />
+                <div>
+                  <h4 class="font-semibold text-indigo-700">Spotify</h4>
+                  <p class="text-sm text-slate-600 mt-1">
+                    Referente en personalización, con recomendaciones impulsadas por datos y un diseño centrado en el
+                    contenido.
+                  </p>
+                </div>
+              </div>
+              <div class="bg-slate-100 p-4 rounded-lg flex items-start space-x-3">
+                <img
+                  src="https://placehold.co/24x24/A2AAAD/ffffff?text="
+                  alt="Logo de Apple"
+                  class="w-6 h-6 rounded-full flex-shrink-0 mt-1"
+                />
+                <div>
+                  <h4 class="font-semibold text-indigo-700">Apple (Tienda Web)</h4>
+                  <p class="text-sm text-slate-600 mt-1">
+                    Diseño único, fácil de navegar y con contenido atractivo que tienta a los usuarios.
+                  </p>
+                </div>
+              </div>
+              <div class="bg-slate-100 p-4 rounded-lg flex items-start space-x-3">
+                <img
+                  src="https://placehold.co/24x24/0078D4/ffffff?text=M"
+                  alt="Logo de Microsoft"
+                  class="w-6 h-6 rounded-full flex-shrink-0 mt-1"
+                />
+                <div>
+                  <h4 class="font-semibold text-indigo-700">Microsoft, Amazon, Walmart</h4>
+                  <p class="text-sm text-slate-600 mt-1">
+                    Destacadas por sus esfuerzos en accesibilidad web, con sitios fáciles de usar para diversas
+                    capacidades.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const navButtons = document.querySelectorAll('.nav-button')
+        const contentSections = document.querySelectorAll('.content-section')
+
+        function switchTab(targetId) {
+          contentSections.forEach((section) => {
+            section.classList.remove('active')
+          })
+          navButtons.forEach((button) => {
+            button.classList.remove('active')
+          })
+
+          document.getElementById(targetId).classList.add('active')
+          document.querySelector(`[data-target="${targetId}"]`).classList.add('active')
+        }
+
+        navButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const targetId = button.dataset.target
+            switchTab(targetId)
+          })
+        })
+
+        const gestaltData = [
+          {
+            id: 'proximidad',
+            name: 'Proximidad',
+            description:
+              'Elementos cercanos se perciben como un grupo. Agrupamos información relacionada para facilitar el escaneo visual.',
+            visual:
+              '<div class="grid grid-cols-3 gap-2 w-3/4"><div class="w-8 h-8 bg-indigo-400 rounded-full"></div><div class="w-8 h-8 bg-indigo-400 rounded-full"></div><div class="w-8 h-8 bg-indigo-400 rounded-full"></div><div class="w-8 h-8 bg-indigo-400 rounded-full"></div><div class="w-8 h-8 bg-indigo-400 rounded-full"></div><div class="w-8 h-8 bg-indigo-400 rounded-full"></div></div>',
+          },
+          {
+            id: 'similitud',
+            name: 'Similitud',
+            description:
+              'Elementos con características similares (color, forma) se perciben como relacionados, incluso si están separados.',
+            visual:
+              '<div class="flex gap-4 w-3/4 justify-center"><div class="w-8 h-8 bg-indigo-400 rounded-full"></div><div class="w-8 h-8 bg-teal-400 rounded-md"></div><div class="w-8 h-8 bg-indigo-400 rounded-full"></div><div class="w-8 h-8 bg-teal-400 rounded-md"></div><div class="w-8 h-8 bg-indigo-400 rounded-full"></div></div>',
+          },
+          {
+            id: 'cierre',
+            name: 'Cierre',
+            description:
+              'Nuestra mente tiende a completar figuras incompletas para percibirlas como un todo coherente.',
+            visual:
+              '<div class="relative w-24 h-24"><div class="absolute top-0 left-0 w-12 h-12 border-t-4 border-l-4 border-indigo-400"></div><div class="absolute top-0 right-0 w-12 h-12 border-t-4 border-r-4 border-indigo-400"></div><div class="absolute bottom-0 left-0 w-12 h-12 border-b-4 border-l-4 border-indigo-400"></div><div class="absolute bottom-0 right-0 w-12 h-12 border-b-4 border-r-4 border-indigo-400"></div></div>',
+          },
+          {
+            id: 'continuidad',
+            name: 'Continuidad',
+            description: 'El ojo sigue líneas y curvas, percibiendo elementos alineados como una sola figura continua.',
+            visual:
+              '<div class="relative w-48 h-12"><div class="absolute w-full h-0.5 bg-slate-300 top-1/2"></div><div class="absolute left-0 top-0 w-8 h-8 bg-indigo-400 rounded-full -mt-4"></div><div class="absolute left-1/2 top-0 w-8 h-8 bg-indigo-400 rounded-full -mt-4 -ml-4"></div><div class="absolute right-0 top-0 w-8 h-8 bg-indigo-400 rounded-full -mt-4"></div></div>',
+          },
+          {
+            id: 'figura-fondo',
+            name: 'Figura-Fondo',
+            description:
+              'Separamos los elementos principales (figura) de su entorno (fondo). Es clave para la jerarquía visual.',
+            visual:
+              '<div class="w-32 h-32 bg-teal-200 rounded-lg flex items-center justify-center"><div class="w-16 h-16 bg-indigo-500 rounded-full"></div></div>',
+          },
+        ]
+
+        const gestaltVisualsContainer = document.getElementById('gestalt-visuals')
+        const gestaltInfoContainer = document.getElementById('gestalt-info')
+
+        gestaltData.forEach((item, index) => {
+          const card = document.createElement('div')
+          card.className =
+            'gestalt-card border-2 border-slate-200 p-4 rounded-lg cursor-pointer transition-all duration-300'
+          card.dataset.id = item.id
+          card.innerHTML = `<h4 class="font-semibold text-lg">${item.name}</h4><p class="text-slate-500 text-sm">${item.description}</p>`
+          gestaltInfoContainer.appendChild(card)
+
+          if (index === 0) {
+            card.classList.add('active')
+            gestaltVisualsContainer.innerHTML = item.visual
+          }
+
+          card.addEventListener('click', () => {
+            document.querySelectorAll('.gestalt-card').forEach((c) => c.classList.remove('active'))
+            card.classList.add('active')
+            gestaltVisualsContainer.innerHTML = item.visual
+          })
+        })
+
+        const cognitiveBiasesData = [
+          {
+            name: 'Efecto de Anclaje',
+            description:
+              'Nos basamos en la primera información recibida. Mostrar un precio original más alto hace que el precio de oferta parezca más atractivo.',
+          },
+          {
+            name: 'Prueba Social',
+            description:
+              'Adoptamos comportamientos si vemos que otros lo hacen. Ej: "1,200 personas compraron esto hoy".',
+          },
+          {
+            name: 'Escasez / Urgencia',
+            description:
+              'Percibimos algo como más valioso si es limitado. Ej: "¡Solo quedan 2 en stock!" o contadores de tiempo.',
+          },
+          {
+            name: 'Posición Serial',
+            description:
+              'Recordamos mejor los primeros y últimos elementos de una lista. La información clave debe ir al principio o al final.',
+          },
+        ]
+
+        const cognitiveBiasesContainer = document.getElementById('cognitive-biases')
+        cognitiveBiasesData.forEach((bias) => {
+          const card = document.createElement('div')
+          card.className = 'bias-card h-40 perspective-1000 cursor-pointer'
+          card.innerHTML = `
+            <div class="bias-card-inner relative w-full h-full">
+                <div class="bias-card-front absolute w-full h-full bg-indigo-100 rounded-lg p-4 flex flex-col justify-center items-center text-center">
+                    <h4 class="font-semibold text-indigo-800">${bias.name}</h4>
+                    <p class="text-xs text-slate-500 mt-2">(Haz clic para saber más)</p>
+                </div>
+                <div class="bias-card-back absolute w-full h-full bg-indigo-500 text-white rounded-lg p-4 flex items-center">
+                    <p class="text-sm">${bias.description}</p>
+                </div>
+            </div>
+        `
+          cognitiveBiasesContainer.appendChild(card)
+          card.addEventListener('click', () => {
+            card.classList.toggle('flipped')
+          })
+        })
+
+        const cwvCtx = document.getElementById('cwvChart').getContext('2d')
+        new Chart(cwvCtx, {
+          type: 'bar',
+          data: {
+            labels: [
+              'Largest Contentful Paint (LCP)',
+              'Interaction to Next Paint (INP)',
+              'Cumulative Layout Shift (CLS)',
+            ],
+            datasets: [
+              {
+                label: 'Umbral Bueno (ms o ratio)',
+                data: [2500, 200, 0.1],
+                backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)'],
+                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            indexAxis: 'y',
+            maintainAspectRatio: false,
+            responsive: true,
+            plugins: {
+              legend: { display: false },
+              title: { display: true, text: 'Valores para una Buena Experiencia de Usuario' },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    let label = context.dataset.label || ''
+                    if (label) {
+                      label += ': '
+                    }
+                    let value = context.raw
+                    if (context.label.includes('LCP') || context.label.includes('INP')) {
+                      label = `Menos de ${value} ms`
+                    } else {
+                      label = `Menos de ${value}`
+                    }
+                    return label
+                  },
+                },
+              },
+            },
+            scales: {
+              x: {
+                beginAtZero: true,
+                type: 'logarithmic',
+                title: {
+                  display: true,
+                  text: 'Valor (escala logarítmica)',
+                },
+              },
+            },
+          },
+        })
+
+        const heatmapCanvas = document.getElementById('heatmap-canvas')
+        const moveHeatmapImage = document.getElementById('move-heatmap-image')
+        const heatmapCtx = heatmapCanvas.getContext('2d')
+        const heatmapExplanation = document.getElementById('heatmap-explanation')
+        const heatmapButtons = {
+          click: document.getElementById('btn-click-map'),
+          scroll: document.getElementById('btn-scroll-map'),
+          move: document.getElementById('btn-move-map'),
+        }
+
+        function resizeCanvas() {
+          const container = heatmapCanvas.parentElement
+          heatmapCanvas.width = container.clientWidth
+          heatmapCanvas.height = container.clientHeight
+          // Ensure the image also resizes with the container
+          moveHeatmapImage.style.width = container.clientWidth + 'px'
+          moveHeatmapImage.style.height = container.clientHeight + 'px'
+        }
+
+        function createGradient(points) {
+          heatmapCtx.clearRect(0, 0, heatmapCanvas.width, heatmapCanvas.height)
+          points.forEach((point) => {
+            const x = point.x * heatmapCanvas.width
+            const y = point.y * heatmapCanvas.height
+            const radius = point.r * Math.min(heatmapCanvas.width, heatmapCanvas.height)
+
+            const g = heatmapCtx.createRadialGradient(x, y, 0, x, y, radius)
+            g.addColorStop(0, `rgba(255, 0, 0, ${point.opacity || 0.8})`) // Use point.opacity or default
+            g.addColorStop(0.5, `rgba(255, 255, 0, ${point.opacity ? point.opacity * 0.6 : 0.5})`)
+            g.addColorStop(1, `rgba(0, 0, 255, ${point.opacity ? point.opacity * 0.2 : 0.2})`)
+
+            heatmapCtx.beginPath()
+            heatmapCtx.arc(x, y, radius, 0, 2 * Math.PI)
+            heatmapCtx.fillStyle = g
+            heatmapCtx.fill()
+          })
+        }
+
+        function createScrollGradient() {
+          heatmapCtx.clearRect(0, 0, heatmapCanvas.width, heatmapCanvas.height)
+          const gradient = heatmapCtx.createLinearGradient(0, 0, 0, heatmapCanvas.height)
+          gradient.addColorStop(0, 'rgba(255, 0, 0, 0.7)')
+          gradient.addColorStop(0.25, 'rgba(255, 165, 0, 0.6)')
+          gradient.addColorStop(0.5, 'rgba(255, 255, 0, 0.5)')
+          gradient.addColorStop(0.75, 'rgba(0, 255, 0, 0.4)')
+          gradient.addColorStop(1, 'rgba(0, 0, 255, 0.2)')
+          heatmapCtx.fillStyle = gradient
+          heatmapCtx.fillRect(0, 0, heatmapCanvas.width, heatmapCanvas.height)
+        }
+
+        const heatmaps = {
+          click: {
+            points: [
+              { x: 0.5, y: 0.6, r: 0.15 },
+              { x: 0.2, y: 0.25, r: 0.1 },
+              { x: 0.8, y: 0.25, r: 0.08 },
+              { x: 0.5, y: 0.1, r: 0.05 },
+            ],
+            explanation:
+              'Los puntos "calientes" (rojos) muestran dónde los usuarios hacen más clics. Es útil para evaluar la efectividad de los botones de llamada a la acción.',
+          },
+          scroll: {
+            explanation:
+              'Muestra hasta dónde se desplazan los usuarios. El rojo indica que el 100% de los usuarios ven esa área, mientras que el azul muestra las zonas menos vistas. Ayuda a ubicar el contenido importante.',
+          },
+          move: {
+            // No points needed as we are using an image directly
+            explanation:
+              'Esta imagen muestra un mapa de movimiento real, donde las áreas más brillantes indican una mayor actividad del cursor, revelando el flujo de atención y las zonas de escaneo visual del usuario.',
+          },
+        }
+
+        function setActiveHeatmap(type) {
+          // Reset button styles
+          Object.values(heatmapButtons).forEach((btn) => {
+            btn.classList.replace('bg-indigo-500', 'bg-slate-200')
+            btn.classList.replace('text-white', 'text-slate-700')
+          })
+          // Set active button style
+          heatmapButtons[type].classList.replace('bg-slate-200', 'bg-indigo-500')
+          heatmapButtons[type].classList.replace('text-slate-700', 'text-white')
+
+          // Hide/show canvas or image based on type
+          if (type === 'move') {
+            heatmapCanvas.classList.add('hidden')
+            moveHeatmapImage.classList.remove('hidden')
+          } else {
+            heatmapCanvas.classList.remove('hidden')
+            moveHeatmapImage.classList.add('hidden')
+            resizeCanvas() // Resize canvas before drawing
+            if (type === 'scroll') {
+              createScrollGradient()
+            } else {
+              // click
+              createGradient(heatmaps[type].points)
+            }
+          }
+
+          heatmapExplanation.textContent = heatmaps[type].explanation
+        }
+
+        heatmapButtons.click.addEventListener('click', () => setActiveHeatmap('click'))
+        heatmapButtons.scroll.addEventListener('click', () => setActiveHeatmap('scroll'))
+        heatmapButtons.move.addEventListener('click', () => setActiveHeatmap('move'))
+
+        window.addEventListener('resize', () => {
+          const activeBtn = document.querySelector('.bg-indigo-500[id^="btn-"]')
+          if (activeBtn) {
+            const type = activeBtn.id.split('-')[1]
+            setActiveHeatmap(type) // Re-apply active state to trigger resize and redraw if canvas
+          }
+        })
+
+        // Initial setup
+        setActiveHeatmap('click')
+        switchTab('psicologia')
+      })
+    </script>
+  </body>
+</html>
