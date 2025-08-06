@@ -20,7 +20,7 @@
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
       body {
-        font-family: 'Inter', sans-serif;
+        font-family: "Inter", sans-serif;
       }
       .nav-button {
         transition: all 0.3s ease;
@@ -339,7 +339,6 @@
                   <ul class="mt-3 text-sm text-slate-500 list-disc list-inside space-y-1">
                     <li>Código HTML válido</li>
                     <li>Compatibilidad con navegadores</li>
-                    <li>Funciona con lectores de pantalla</li>
                   </ul>
                 </div>
               </div>
@@ -389,7 +388,7 @@
                 </ul>
               </div>
               <div>
-                <h3 class="text-xl font-semibold mb-3">Micro-Frontends y Diseño Sostenible</h3>
+                <h3 class="text-xl font-semibold mb-3">Micro-Frontends</h3>
                 <p class="text-slate-600 mb-4">
                   Dos conceptos que reflejan la madurez de la disciplina: la necesidad de escalar equipos y la
                   responsabilidad ecológica.
@@ -401,14 +400,6 @@
                       ><strong class="font-semibold">Micro-Frontends:</strong> Divide una aplicación monolítica en
                       piezas más pequeñas y manejables, permitiendo que equipos independientes trabajen de forma
                       autónoma.</span
-                    >
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-teal-500 mr-3 mt-1">&#10003;</span>
-                    <span
-                      ><strong class="font-semibold">Diseño Sostenible:</strong> Busca minimizar el impacto ambiental de
-                      los sitios web optimizando recursos, reduciendo el consumo de energía y eligiendo hosting
-                      ecológico.</span
                     >
                   </li>
                 </ul>
@@ -530,121 +521,121 @@
     </div>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const navButtons = document.querySelectorAll('.nav-button')
-        const contentSections = document.querySelectorAll('.content-section')
+      document.addEventListener("DOMContentLoaded", function () {
+        const navButtons = document.querySelectorAll(".nav-button");
+        const contentSections = document.querySelectorAll(".content-section");
 
         function switchTab(targetId) {
           contentSections.forEach((section) => {
-            section.classList.remove('active')
-          })
+            section.classList.remove("active");
+          });
           navButtons.forEach((button) => {
-            button.classList.remove('active')
-          })
+            button.classList.remove("active");
+          });
 
-          document.getElementById(targetId).classList.add('active')
-          document.querySelector(`[data-target="${targetId}"]`).classList.add('active')
+          document.getElementById(targetId).classList.add("active");
+          document.querySelector(`[data-target="${targetId}"]`).classList.add("active");
         }
 
         navButtons.forEach((button) => {
-          button.addEventListener('click', () => {
-            const targetId = button.dataset.target
-            switchTab(targetId)
-          })
-        })
+          button.addEventListener("click", () => {
+            const targetId = button.dataset.target;
+            switchTab(targetId);
+          });
+        });
 
         const gestaltData = [
           {
-            id: 'proximidad',
-            name: 'Proximidad',
+            id: "proximidad",
+            name: "Proximidad",
             description:
-              'Elementos cercanos se perciben como un grupo. Agrupamos información relacionada para facilitar el escaneo visual.',
+              "Elementos cercanos se perciben como un grupo. Agrupamos información relacionada para facilitar el escaneo visual.",
             visual:
               '<div class="grid grid-cols-3 gap-2 w-3/4"><div class="w-8 h-8 bg-indigo-400 rounded-full"></div><div class="w-8 h-8 bg-indigo-400 rounded-full"></div><div class="w-8 h-8 bg-indigo-400 rounded-full"></div><div class="w-8 h-8 bg-indigo-400 rounded-full"></div><div class="w-8 h-8 bg-indigo-400 rounded-full"></div><div class="w-8 h-8 bg-indigo-400 rounded-full"></div></div>',
           },
           {
-            id: 'similitud',
-            name: 'Similitud',
+            id: "similitud",
+            name: "Similitud",
             description:
-              'Elementos con características similares (color, forma) se perciben como relacionados, incluso si están separados.',
+              "Elementos con características similares (color, forma) se perciben como relacionados, incluso si están separados.",
             visual:
               '<div class="flex gap-4 w-3/4 justify-center"><div class="w-8 h-8 bg-indigo-400 rounded-full"></div><div class="w-8 h-8 bg-teal-400 rounded-md"></div><div class="w-8 h-8 bg-indigo-400 rounded-full"></div><div class="w-8 h-8 bg-teal-400 rounded-md"></div><div class="w-8 h-8 bg-indigo-400 rounded-full"></div></div>',
           },
           {
-            id: 'cierre',
-            name: 'Cierre',
+            id: "cierre",
+            name: "Cierre",
             description:
-              'Nuestra mente tiende a completar figuras incompletas para percibirlas como un todo coherente.',
+              "Nuestra mente tiende a completar figuras incompletas para percibirlas como un todo coherente.",
             visual:
               '<div class="relative w-24 h-24"><div class="absolute top-0 left-0 w-12 h-12 border-t-4 border-l-4 border-indigo-400"></div><div class="absolute top-0 right-0 w-12 h-12 border-t-4 border-r-4 border-indigo-400"></div><div class="absolute bottom-0 left-0 w-12 h-12 border-b-4 border-l-4 border-indigo-400"></div><div class="absolute bottom-0 right-0 w-12 h-12 border-b-4 border-r-4 border-indigo-400"></div></div>',
           },
           {
-            id: 'continuidad',
-            name: 'Continuidad',
-            description: 'El ojo sigue líneas y curvas, percibiendo elementos alineados como una sola figura continua.',
+            id: "continuidad",
+            name: "Continuidad",
+            description: "El ojo sigue líneas y curvas, percibiendo elementos alineados como una sola figura continua.",
             visual:
               '<div class="relative w-48 h-12"><div class="absolute w-full h-0.5 bg-slate-300 top-1/2"></div><div class="absolute left-0 top-0 w-8 h-8 bg-indigo-400 rounded-full -mt-4"></div><div class="absolute left-1/2 top-0 w-8 h-8 bg-indigo-400 rounded-full -mt-4 -ml-4"></div><div class="absolute right-0 top-0 w-8 h-8 bg-indigo-400 rounded-full -mt-4"></div></div>',
           },
           {
-            id: 'figura-fondo',
-            name: 'Figura-Fondo',
+            id: "figura-fondo",
+            name: "Figura-Fondo",
             description:
-              'Separamos los elementos principales (figura) de su entorno (fondo). Es clave para la jerarquía visual.',
+              "Separamos los elementos principales (figura) de su entorno (fondo). Es clave para la jerarquía visual.",
             visual:
               '<div class="w-32 h-32 bg-teal-200 rounded-lg flex items-center justify-center"><div class="w-16 h-16 bg-indigo-500 rounded-full"></div></div>',
           },
-        ]
+        ];
 
-        const gestaltVisualsContainer = document.getElementById('gestalt-visuals')
-        const gestaltInfoContainer = document.getElementById('gestalt-info')
+        const gestaltVisualsContainer = document.getElementById("gestalt-visuals");
+        const gestaltInfoContainer = document.getElementById("gestalt-info");
 
         gestaltData.forEach((item, index) => {
-          const card = document.createElement('div')
+          const card = document.createElement("div");
           card.className =
-            'gestalt-card border-2 border-slate-200 p-4 rounded-lg cursor-pointer transition-all duration-300'
-          card.dataset.id = item.id
-          card.innerHTML = `<h4 class="font-semibold text-lg">${item.name}</h4><p class="text-slate-500 text-sm">${item.description}</p>`
-          gestaltInfoContainer.appendChild(card)
+            "gestalt-card border-2 border-slate-200 p-4 rounded-lg cursor-pointer transition-all duration-300";
+          card.dataset.id = item.id;
+          card.innerHTML = `<h4 class="font-semibold text-lg">${item.name}</h4><p class="text-slate-500 text-sm">${item.description}</p>`;
+          gestaltInfoContainer.appendChild(card);
 
           if (index === 0) {
-            card.classList.add('active')
-            gestaltVisualsContainer.innerHTML = item.visual
+            card.classList.add("active");
+            gestaltVisualsContainer.innerHTML = item.visual;
           }
 
-          card.addEventListener('click', () => {
-            document.querySelectorAll('.gestalt-card').forEach((c) => c.classList.remove('active'))
-            card.classList.add('active')
-            gestaltVisualsContainer.innerHTML = item.visual
-          })
-        })
+          card.addEventListener("click", () => {
+            document.querySelectorAll(".gestalt-card").forEach((c) => c.classList.remove("active"));
+            card.classList.add("active");
+            gestaltVisualsContainer.innerHTML = item.visual;
+          });
+        });
 
         const cognitiveBiasesData = [
           {
-            name: 'Efecto de Anclaje',
+            name: "Efecto de Anclaje",
             description:
-              'Nos basamos en la primera información recibida. Mostrar un precio original más alto hace que el precio de oferta parezca más atractivo.',
+              "Nos basamos en la primera información recibida. Mostrar un precio original más alto hace que el precio de oferta parezca más atractivo.",
           },
           {
-            name: 'Prueba Social',
+            name: "Prueba Social",
             description:
               'Adoptamos comportamientos si vemos que otros lo hacen. Ej: "1,200 personas compraron esto hoy".',
           },
           {
-            name: 'Escasez / Urgencia',
+            name: "Escasez / Urgencia",
             description:
               'Percibimos algo como más valioso si es limitado. Ej: "¡Solo quedan 2 en stock!" o contadores de tiempo.',
           },
           {
-            name: 'Posición Serial',
+            name: "Posición Serial",
             description:
-              'Recordamos mejor los primeros y últimos elementos de una lista. La información clave debe ir al principio o al final.',
+              "Recordamos mejor los primeros y últimos elementos de una lista. La información clave debe ir al principio o al final.",
           },
-        ]
+        ];
 
-        const cognitiveBiasesContainer = document.getElementById('cognitive-biases')
+        const cognitiveBiasesContainer = document.getElementById("cognitive-biases");
         cognitiveBiasesData.forEach((bias) => {
-          const card = document.createElement('div')
-          card.className = 'bias-card h-40 perspective-1000 cursor-pointer'
+          const card = document.createElement("div");
+          card.className = "bias-card h-40 perspective-1000 cursor-pointer";
           card.innerHTML = `
             <div class="bias-card-inner relative w-full h-full">
                 <div class="bias-card-front absolute w-full h-full bg-indigo-100 rounded-lg p-4 flex flex-col justify-center items-center text-center">
@@ -655,53 +646,53 @@
                     <p class="text-sm">${bias.description}</p>
                 </div>
             </div>
-        `
-          cognitiveBiasesContainer.appendChild(card)
-          card.addEventListener('click', () => {
-            card.classList.toggle('flipped')
-          })
-        })
+        `;
+          cognitiveBiasesContainer.appendChild(card);
+          card.addEventListener("click", () => {
+            card.classList.toggle("flipped");
+          });
+        });
 
-        const cwvCtx = document.getElementById('cwvChart').getContext('2d')
+        const cwvCtx = document.getElementById("cwvChart").getContext("2d");
         new Chart(cwvCtx, {
-          type: 'bar',
+          type: "bar",
           data: {
             labels: [
-              'Largest Contentful Paint (LCP)',
-              'Interaction to Next Paint (INP)',
-              'Cumulative Layout Shift (CLS)',
+              "Largest Contentful Paint (LCP)",
+              "Interaction to Next Paint (INP)",
+              "Cumulative Layout Shift (CLS)",
             ],
             datasets: [
               {
-                label: 'Umbral Bueno (ms o ratio)',
+                label: "Umbral Bueno (ms o ratio)",
                 data: [2500, 200, 0.1],
-                backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)'],
-                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+                backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(54, 162, 235, 0.6)", "rgba(255, 206, 86, 0.6)"],
+                borderColor: ["rgba(75, 192, 192, 1)", "rgba(54, 162, 235, 1)", "rgba(255, 206, 86, 1)"],
                 borderWidth: 1,
               },
             ],
           },
           options: {
-            indexAxis: 'y',
+            indexAxis: "y",
             maintainAspectRatio: false,
             responsive: true,
             plugins: {
               legend: { display: false },
-              title: { display: true, text: 'Valores para una Buena Experiencia de Usuario' },
+              title: { display: true, text: "Valores para una Buena Experiencia de Usuario" },
               tooltip: {
                 callbacks: {
                   label: function (context) {
-                    let label = context.dataset.label || ''
+                    let label = context.dataset.label || "";
                     if (label) {
-                      label += ': '
+                      label += ": ";
                     }
-                    let value = context.raw
-                    if (context.label.includes('LCP') || context.label.includes('INP')) {
-                      label = `Menos de ${value} ms`
+                    let value = context.raw;
+                    if (context.label.includes("LCP") || context.label.includes("INP")) {
+                      label = `Menos de ${value} ms`;
                     } else {
-                      label = `Menos de ${value}`
+                      label = `Menos de ${value}`;
                     }
-                    return label
+                    return label;
                   },
                 },
               },
@@ -709,64 +700,64 @@
             scales: {
               x: {
                 beginAtZero: true,
-                type: 'logarithmic',
+                type: "logarithmic",
                 title: {
                   display: true,
-                  text: 'Valor (escala logarítmica)',
+                  text: "Valor (escala logarítmica)",
                 },
               },
             },
           },
-        })
+        });
 
-        const heatmapCanvas = document.getElementById('heatmap-canvas')
-        const moveHeatmapImage = document.getElementById('move-heatmap-image')
-        const heatmapCtx = heatmapCanvas.getContext('2d')
-        const heatmapExplanation = document.getElementById('heatmap-explanation')
+        const heatmapCanvas = document.getElementById("heatmap-canvas");
+        const moveHeatmapImage = document.getElementById("move-heatmap-image");
+        const heatmapCtx = heatmapCanvas.getContext("2d");
+        const heatmapExplanation = document.getElementById("heatmap-explanation");
         const heatmapButtons = {
-          click: document.getElementById('btn-click-map'),
-          scroll: document.getElementById('btn-scroll-map'),
-          move: document.getElementById('btn-move-map'),
-        }
+          click: document.getElementById("btn-click-map"),
+          scroll: document.getElementById("btn-scroll-map"),
+          move: document.getElementById("btn-move-map"),
+        };
 
         function resizeCanvas() {
-          const container = heatmapCanvas.parentElement
-          heatmapCanvas.width = container.clientWidth
-          heatmapCanvas.height = container.clientHeight
+          const container = heatmapCanvas.parentElement;
+          heatmapCanvas.width = container.clientWidth;
+          heatmapCanvas.height = container.clientHeight;
           // Ensure the image also resizes with the container
-          moveHeatmapImage.style.width = container.clientWidth + 'px'
-          moveHeatmapImage.style.height = container.clientHeight + 'px'
+          moveHeatmapImage.style.width = container.clientWidth + "px";
+          moveHeatmapImage.style.height = container.clientHeight + "px";
         }
 
         function createGradient(points) {
-          heatmapCtx.clearRect(0, 0, heatmapCanvas.width, heatmapCanvas.height)
+          heatmapCtx.clearRect(0, 0, heatmapCanvas.width, heatmapCanvas.height);
           points.forEach((point) => {
-            const x = point.x * heatmapCanvas.width
-            const y = point.y * heatmapCanvas.height
-            const radius = point.r * Math.min(heatmapCanvas.width, heatmapCanvas.height)
+            const x = point.x * heatmapCanvas.width;
+            const y = point.y * heatmapCanvas.height;
+            const radius = point.r * Math.min(heatmapCanvas.width, heatmapCanvas.height);
 
-            const g = heatmapCtx.createRadialGradient(x, y, 0, x, y, radius)
-            g.addColorStop(0, `rgba(255, 0, 0, ${point.opacity || 0.8})`) // Use point.opacity or default
-            g.addColorStop(0.5, `rgba(255, 255, 0, ${point.opacity ? point.opacity * 0.6 : 0.5})`)
-            g.addColorStop(1, `rgba(0, 0, 255, ${point.opacity ? point.opacity * 0.2 : 0.2})`)
+            const g = heatmapCtx.createRadialGradient(x, y, 0, x, y, radius);
+            g.addColorStop(0, `rgba(255, 0, 0, ${point.opacity || 0.8})`); // Use point.opacity or default
+            g.addColorStop(0.5, `rgba(255, 255, 0, ${point.opacity ? point.opacity * 0.6 : 0.5})`);
+            g.addColorStop(1, `rgba(0, 0, 255, ${point.opacity ? point.opacity * 0.2 : 0.2})`);
 
-            heatmapCtx.beginPath()
-            heatmapCtx.arc(x, y, radius, 0, 2 * Math.PI)
-            heatmapCtx.fillStyle = g
-            heatmapCtx.fill()
-          })
+            heatmapCtx.beginPath();
+            heatmapCtx.arc(x, y, radius, 0, 2 * Math.PI);
+            heatmapCtx.fillStyle = g;
+            heatmapCtx.fill();
+          });
         }
 
         function createScrollGradient() {
-          heatmapCtx.clearRect(0, 0, heatmapCanvas.width, heatmapCanvas.height)
-          const gradient = heatmapCtx.createLinearGradient(0, 0, 0, heatmapCanvas.height)
-          gradient.addColorStop(0, 'rgba(255, 0, 0, 0.7)')
-          gradient.addColorStop(0.25, 'rgba(255, 165, 0, 0.6)')
-          gradient.addColorStop(0.5, 'rgba(255, 255, 0, 0.5)')
-          gradient.addColorStop(0.75, 'rgba(0, 255, 0, 0.4)')
-          gradient.addColorStop(1, 'rgba(0, 0, 255, 0.2)')
-          heatmapCtx.fillStyle = gradient
-          heatmapCtx.fillRect(0, 0, heatmapCanvas.width, heatmapCanvas.height)
+          heatmapCtx.clearRect(0, 0, heatmapCanvas.width, heatmapCanvas.height);
+          const gradient = heatmapCtx.createLinearGradient(0, 0, 0, heatmapCanvas.height);
+          gradient.addColorStop(0, "rgba(255, 0, 0, 0.7)");
+          gradient.addColorStop(0.25, "rgba(255, 165, 0, 0.6)");
+          gradient.addColorStop(0.5, "rgba(255, 255, 0, 0.5)");
+          gradient.addColorStop(0.75, "rgba(0, 255, 0, 0.4)");
+          gradient.addColorStop(1, "rgba(0, 0, 255, 0.2)");
+          heatmapCtx.fillStyle = gradient;
+          heatmapCtx.fillRect(0, 0, heatmapCanvas.width, heatmapCanvas.height);
         }
 
         const heatmaps = {
@@ -782,60 +773,60 @@
           },
           scroll: {
             explanation:
-              'Muestra hasta dónde se desplazan los usuarios. El rojo indica que el 100% de los usuarios ven esa área, mientras que el azul muestra las zonas menos vistas. Ayuda a ubicar el contenido importante.',
+              "Muestra hasta dónde se desplazan los usuarios. El rojo indica que el 100% de los usuarios ven esa área, mientras que el azul muestra las zonas menos vistas. Ayuda a ubicar el contenido importante.",
           },
           move: {
             // No points needed as we are using an image directly
             explanation:
-              'Esta imagen muestra un mapa de movimiento real, donde las áreas más brillantes indican una mayor actividad del cursor, revelando el flujo de atención y las zonas de escaneo visual del usuario.',
+              "Esta imagen muestra un mapa de movimiento real, donde las áreas más brillantes indican una mayor actividad del cursor, revelando el flujo de atención y las zonas de escaneo visual del usuario.",
           },
-        }
+        };
 
         function setActiveHeatmap(type) {
           // Reset button styles
           Object.values(heatmapButtons).forEach((btn) => {
-            btn.classList.replace('bg-indigo-500', 'bg-slate-200')
-            btn.classList.replace('text-white', 'text-slate-700')
-          })
+            btn.classList.replace("bg-indigo-500", "bg-slate-200");
+            btn.classList.replace("text-white", "text-slate-700");
+          });
           // Set active button style
-          heatmapButtons[type].classList.replace('bg-slate-200', 'bg-indigo-500')
-          heatmapButtons[type].classList.replace('text-slate-700', 'text-white')
+          heatmapButtons[type].classList.replace("bg-slate-200", "bg-indigo-500");
+          heatmapButtons[type].classList.replace("text-slate-700", "text-white");
 
           // Hide/show canvas or image based on type
-          if (type === 'move') {
-            heatmapCanvas.classList.add('hidden')
-            moveHeatmapImage.classList.remove('hidden')
+          if (type === "move") {
+            heatmapCanvas.classList.add("hidden");
+            moveHeatmapImage.classList.remove("hidden");
           } else {
-            heatmapCanvas.classList.remove('hidden')
-            moveHeatmapImage.classList.add('hidden')
-            resizeCanvas() // Resize canvas before drawing
-            if (type === 'scroll') {
-              createScrollGradient()
+            heatmapCanvas.classList.remove("hidden");
+            moveHeatmapImage.classList.add("hidden");
+            resizeCanvas(); // Resize canvas before drawing
+            if (type === "scroll") {
+              createScrollGradient();
             } else {
               // click
-              createGradient(heatmaps[type].points)
+              createGradient(heatmaps[type].points);
             }
           }
 
-          heatmapExplanation.textContent = heatmaps[type].explanation
+          heatmapExplanation.textContent = heatmaps[type].explanation;
         }
 
-        heatmapButtons.click.addEventListener('click', () => setActiveHeatmap('click'))
-        heatmapButtons.scroll.addEventListener('click', () => setActiveHeatmap('scroll'))
-        heatmapButtons.move.addEventListener('click', () => setActiveHeatmap('move'))
+        heatmapButtons.click.addEventListener("click", () => setActiveHeatmap("click"));
+        heatmapButtons.scroll.addEventListener("click", () => setActiveHeatmap("scroll"));
+        heatmapButtons.move.addEventListener("click", () => setActiveHeatmap("move"));
 
-        window.addEventListener('resize', () => {
-          const activeBtn = document.querySelector('.bg-indigo-500[id^="btn-"]')
+        window.addEventListener("resize", () => {
+          const activeBtn = document.querySelector('.bg-indigo-500[id^="btn-"]');
           if (activeBtn) {
-            const type = activeBtn.id.split('-')[1]
-            setActiveHeatmap(type) // Re-apply active state to trigger resize and redraw if canvas
+            const type = activeBtn.id.split("-")[1];
+            setActiveHeatmap(type); // Re-apply active state to trigger resize and redraw if canvas
           }
-        })
+        });
 
         // Initial setup
-        setActiveHeatmap('click')
-        switchTab('psicologia')
-      })
+        setActiveHeatmap("click");
+        switchTab("psicologia");
+      });
     </script>
   </body>
 </html>
